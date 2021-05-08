@@ -1,0 +1,97 @@
+.docs-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 32px 48px 0;
+}
+
+.result-title {
+    width: 100%;
+    max-width: 1268px;
+    font-weight: normal;
+    font-size: 18px;
+    color: var(--light-grey);
+    margin-left: 64px;
+    margin-bottom: 12px;
+}
+
+.result-title span {
+    font-size: 12px;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.result-title span:hover {
+    text-decoration: underline;
+}
+
+.my-masonry-grid {
+    display: -webkit-box;
+    /* Not needed if autoprefixing */
+    display: -ms-flexbox;
+    /* Not needed if autoprefixing */
+    display: flex;
+    margin-left: -3px;
+    /* gutter size offset */
+    width: 100%;
+    max-width: 1268px;
+}
+
+.my-masonry-grid_column {
+    padding-left: 32px;
+    /* gutter size */
+    background-clip: padding-box;
+}
+
+/* Style your items */
+.my-masonry-grid_column>.doc-card {
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    background: linear-gradient(180deg, #242C30 0%, #152B37 197.38%);
+    border-radius: 24px;
+    margin-bottom: 16px;
+    cursor: pointer;
+}
+
+.my-masonry-grid_column>.doc-card:hover {
+    background: var(--primary-hover);
+}
+
+.doc-card__title {
+    font-size: 18px;
+    font-weight: normal;
+    color: var(--light-grey);
+}
+
+.doc-card__open-popup-link {
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+    font-size: 18px;
+    color: var(--accent-color);
+}
+
+.doc-card__open-popup-link img{
+    margin-left: 4px;
+}
+
+/* @media (max-width: 800px) {
+    .my-masonry-grid {
+      margin-left: -15px; 
+    }
+    .my-masonry-grid_column {
+      padding-left: 15px;
+    }
+    .my-masonry-grid_column > div {
+      margin-bottom: 15px;
+    }
+  } 
+*/
+
+@media (max-width: 500px) {
+    .my-masonry-grid_column {
+        padding-left: 0;
+    }
+}

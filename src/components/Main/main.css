@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+    --primary-bg-dark: #181E21;
+    --primary-bg-light: #1B2225;
+    --primary-color: #00304B;
+    --primary-hover: #003c5f;
+    --accent-color: #66C8FF;
+    --pure-white: #FFFFFF;
+    --light-grey: #DDDDDD;
+    --dark-grey: #ABABAB;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
+}
+
+body {
+    background: var(--primary-bg-light);
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    width: 100%;
+    height: 412px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    background: var(--primary-bg-dark);
+    padding-bottom: 48px;
+}
+
+.header__container {
+    width: 100%;
+    max-width: 662px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header__container.auth {
+    align-items: flex-start;
+}
+
+.app-title {
+    font-weight: 600;
+    font-size: 48px;
+    color: #FFFFFF;
+}
+
+.login-btn {
+    display: flex;
+    align-items: center;
+    margin-top: 48px;
+    padding: 20px 32px;
+    background: var(--primary-color);
+    border: 0;
+    border-radius: 36px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.login-btn:hover {
+    background: var(--primary-hover);
+    transform: scale(1.03);
+}
+
+.login-btn:disabled {
+    opacity: .2;
+}
+
+.login-btn__title {
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--accent-color);
+}
+
+.login-btn img:nth-child(2) {
+    margin-left: 4px;
+    margin-right: 20px;
+    ;
+}
+
+.logout-btn {
+    width: fit-content;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    border: 0;
+    cursor: pointer;
+}
+
+.logout-btn img:nth-child(1) {
+    width: 42px;
+    height: 42px;
+    border-radius: 100px;
+    margin-right: 4px;
+}
+
+@media screen and (max-width: 760px) {
+    header {
+        padding-top: 128px;
+        padding-bottom: 0;
+        height: fit-content;
+        background: transparent;
+    }
+}
+
+@media screen and (max-width: 340px) {
+    .login-btn img {
+        display: none;
+    }
+}
