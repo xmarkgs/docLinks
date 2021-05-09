@@ -12,6 +12,7 @@ class Main extends Component {
     }
 
     responseGoogle = (googleAuth) => {
+        console.log(googleAuth);
         let { profileObj: { name: userName } } = googleAuth;
         let { profileObj: { imageUrl: avatarLink } } = googleAuth;
         console.log(googleAuth);
