@@ -94,18 +94,21 @@ class MainAuthenticated extends Component {
             sortedDocObjects: [],
             inSearch: true
         }, () => {
-            fetch(`https://www.googleapis.com/drive/v3/files?q=mimeType = 'application/vnd.google-apps.document' ${this.state.searchParametersValue ? `and '${email}' in writers` : ''}`, {
+            fetch(`https://www.googleapis.com/drive/v3/files?q=mimeType = 'application/vnd.google-apps.document'`, {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${accessToken}` }
             })
                 .then(res => res.json())
                 .then(res => {
                     let docObjects = [];
-                    console.log(res)
-                    for (let i = 0; i < res.files.length; i++) {
+                    let findCover = (i) => {
                         this.getDocumentInfo(null, res.files[i].id, true)
                             .then(doc => {
                                 docObjects.push(doc);
+                                this.setState({
+                                    inSearch: true,
+                                    tooManyRequests: false
+                                });
                                 if (docObjects.length === res.files.length) {
                                     return docObjects;
                                 }
@@ -175,10 +178,100 @@ class MainAuthenticated extends Component {
                             .catch(err => {
                                 console.log(err);
                                 this.setState({
-                                    inSearch: false,
                                     tooManyRequests: true
                                 });
+                                setTimeout(() => {
+                                    findCover(i);
+                                }, 500);
                             });
+                    }
+                    console.log(res)
+                    for (let i = 0; i < res.files.length; i++) {
+                        findCover(i);
+
+
+                        // this.getDocumentInfo(null, res.files[i].id, true)
+                        //     .then(doc => {
+                        //         docObjects.push(doc);
+                        //         this.setState({
+                        //             inSearch: true,
+                        //             tooManyRequests: false
+                        //         });
+                        //         if (docObjects.length === res.files.length) {
+                        //             return docObjects;
+                        //         }
+                        //     })
+                        //     .then((docObjects) => {
+                        //         if (docObjects) {
+                        //             for (let doc of docObjects) {
+                        //                 for (let otherDoc of docObjects) {
+                        //                     for (let link of otherDoc.links.foundLinks) {
+                        //                         if (link.includes(`https://docs.google.com/document/d/${doc.id}`)) {
+                        //                             console.log(otherDoc.title);
+                        //                             doc.links.matchedLinksInOtherFiles.push({
+                        //                                 foundInDocTitle: otherDoc.title,
+                        //                                 foundInDocID: otherDoc.id
+                        //                             });
+                        //                         }
+                        //                     }
+                        //                 }
+                        //             }
+                        //             return docObjects;
+                        //         }
+                        //     })
+                        //     .then(docObjects => {
+                        //         if (docObjects) {
+                        //             console.log(docObjects);
+
+                        //             let docsLinksFormatted = [];
+                        //             for (let docNew of docObjects) {
+                        //                 let formattedDoc = docNew;
+                        //                 let linksArray = [];
+                        //                 for (let link of docNew.links.foundLinks) {
+                        //                     console.log(link);
+                        //                     for (let otherDoc of docObjects) {
+                        //                         console.log(otherDoc.id);
+                        //                         if (link.includes(otherDoc.id)) {
+                        //                             console.log("athc");
+                        //                             console.log(linksArray);
+                        //                             linksArray.push({
+                        //                                 link,
+                        //                                 linkTitle: otherDoc.title
+                        //                             })
+                        //                         }
+                        //                     }
+                        //                 }
+                        //                 formattedDoc.links.foundLinks = linksArray;
+                        //                 docsLinksFormatted.push(formattedDoc);
+                        //             }
+
+                        //             console.log(docsLinksFormatted);
+
+                        //             let ownedDocs = [];
+                        //             for (let doc of docsLinksFormatted) {
+                        //                 if (doc.owner.includes(email)) {
+                        //                     ownedDocs.push(doc);
+                        //                 }
+                        //             }
+
+                        //             this.setState({
+                        //                 docObjects: docsLinksFormatted,
+                        //                 ownedDocObjects: ownedDocs,
+                        //                 sortedDocObjects: docsLinksFormatted,
+                        //                 inSearch: false,
+                        //                 tooManyRequests: false
+                        //             });
+                        //         }
+                        //     })
+                        //     .catch(err => {
+                        //         console.log(err);
+                        //         this.setState({
+                        //             tooManyRequests: true
+                        //         });
+                        //         setTimeout(() => {
+                        //             this.getDocumentInfo(null, res.files[i].id, true)
+                        //         }, 1000);
+                        //     });
                     }
                 });
         })
