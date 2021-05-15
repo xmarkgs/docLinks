@@ -64,6 +64,7 @@ class MainAuthenticated extends Component {
     }
 
     findDocumentLinks = (content, docID) => {
+        console.log(content);
         let links = {
             foundLinks: [],
             matchedLinksInOtherFiles: []
@@ -100,6 +101,7 @@ class MainAuthenticated extends Component {
             })
                 .then(res => res.json())
                 .then(res => {
+                    console.log(res);
                     let docObjects = [];
                     let findCover = (i) => {
                         this.getDocumentInfo(null, res.files[i].id, true)
