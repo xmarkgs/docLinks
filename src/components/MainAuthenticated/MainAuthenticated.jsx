@@ -72,7 +72,7 @@ class MainAuthenticated extends Component {
         for (let i = 0; i < content.length; i++) {
             if (content[i].paragraph !== undefined && content[i].paragraph.elements !== undefined) {
                 for (let z = 0; z < content[i].paragraph.elements.length; z++) {
-                    if (content[i].paragraph.elements[z].textRun !== undefined && content[i].paragraph.elements[z].textRun.textStyle !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link !== undefined) {
+                    if (content[i].paragraph.elements[z].textRun !== undefined && content[i].paragraph.elements[z].textRun.textStyle !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link.length > 1) {
                         if (content[i].paragraph.elements[z].textRun.textStyle.link.url.includes("https://docs.google.com/document/d")) {
                             links.foundLinks.push(content[i].paragraph.elements[z].textRun.textStyle.link.url);
                         }
