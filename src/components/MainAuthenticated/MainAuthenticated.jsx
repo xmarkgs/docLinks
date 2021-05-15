@@ -142,7 +142,7 @@ class MainAuthenticated extends Component {
                                         for (let link of docNew.links.foundLinks) {
                                             console.log(link);
                                             for (let otherDoc of docObjects) {
-                                                console.log(otherDoc.id);
+                                                // console.log(otherDoc.id);
                                                 if (link.includes(otherDoc.id)) {
                                                     console.log("athc");
                                                     console.log(linksArray);
@@ -182,7 +182,7 @@ class MainAuthenticated extends Component {
                                 });
                                 setTimeout(() => {
                                     findCover(i);
-                                }, 500);
+                                }, Math.random() * 1000 * 5);
                             });
                     }
                     console.log(res)
