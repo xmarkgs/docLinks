@@ -58,7 +58,7 @@ class MainAuthenticated extends Component {
                 return;
             })
             .then(() => {
-                console.log(docObj);
+                console.log(docObj.links.foundLinks);
                 return docObj;
             })
     }
@@ -72,7 +72,7 @@ class MainAuthenticated extends Component {
         for (let i = 0; i < content.length; i++) {
             if (content[i].paragraph !== undefined && content[i].paragraph.elements !== undefined) {
                 for (let z = 0; z < content[i].paragraph.elements.length; z++) {
-                    if (content[i].paragraph.elements[z].textRun !== undefined && content[i].paragraph.elements[z].textRun.textStyle !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link.length > 1) {
+                    if (content[i].paragraph.elements[z].textRun !== undefined && content[i].paragraph.elements[z].textRun.textStyle !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link.url.length > 1) {
                         if (content[i].paragraph.elements[z].textRun.textStyle.link.url.includes("https://docs.google.com/document/d")) {
                             links.foundLinks.push(content[i].paragraph.elements[z].textRun.textStyle.link.url);
                         }
@@ -84,8 +84,37 @@ class MainAuthenticated extends Component {
                         }
                     }
                 }
+            } else if (content[i].table !== undefined && content[i].table.tableRows !== undefined) {
+                for (let z = 0; z < content[i].table.tableRows.length; z++) {
+                    if (content[i].table.tableRows[z].tableCells !== undefined) {
+                        for (let y = 0; y < content[i].table.tableRows[z].tableCells.length; y++) {
+                            if (content[i].table.tableRows[z].tableCells[y].content !== undefined) {
+                                for (let b = 0; b < content[i].table.tableRows[z].tableCells[y].content.length; b++) {
+                                    if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements !== undefined) {
+                                        for (let c = 0; c < content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements.length; c++) {
+                                            if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url.length > 1) {
+                                                if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url.includes("https://docs.google.com/document/d")) {
+                                                    console.log("sd");
+                                                    links.foundLinks.push(content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url);
+                                                }
+                                            } else if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.content !== undefined) {
+                                                for (let string of content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.content.split(" ")) {
+                                                    if (string.includes("https://docs.google.com/document/d/")) {
+                                                        links.foundLinks.push(string);
+                                                        console.log(string);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
+        console.log(links.foundLinks);
         return links;
     }
 
@@ -112,10 +141,12 @@ class MainAuthenticated extends Component {
                                     tooManyRequests: false
                                 });
                                 if (docObjects.length === res.files.length) {
+                                    console.log(docObjects);
                                     return docObjects;
                                 }
                             })
                             .then((docObjects) => {
+                                console.log(docObjects);
                                 if (docObjects) {
                                     for (let doc of docObjects) {
                                         for (let otherDoc of docObjects) {
@@ -139,22 +170,32 @@ class MainAuthenticated extends Component {
 
                                     let docsLinksFormatted = [];
                                     for (let docNew of docObjects) {
-                                        let formattedDoc = docNew;
                                         let linksArray = [];
+                                        console.log(linksArray);
                                         for (let link of docNew.links.foundLinks) {
-                                            console.log(link);
+                                            let noFoundCounter = 0;
                                             for (let otherDoc of docObjects) {
-                                                // console.log(otherDoc.id);
+                                                console.log(link);
+                                                console.log(otherDoc);
+                                                console.log(linksArray);
                                                 if (link.includes(otherDoc.id)) {
                                                     console.log("athc");
-                                                    console.log(linksArray);
+                                                    
                                                     linksArray.push({
                                                         link,
                                                         linkTitle: otherDoc.title
-                                                    })
+                                                    });
+                                                } else {
+                                                    noFoundCounter++;
+                                                    if (noFoundCounter === docObjects.length) {
+                                                        linksArray.push({
+                                                            link,
+                                                        });
+                                                    }
                                                 }
                                             }
                                         }
+                                        let formattedDoc = docNew;
                                         formattedDoc.links.foundLinks = linksArray;
                                         docsLinksFormatted.push(formattedDoc);
                                     }

@@ -22,13 +22,13 @@ const PopUp = ({ doc, hidePopUp }) => {
                         <div className="popup__links__column">
                             <h4 className="popup__links__title">Found links:</h4>
                             {doc.links.foundLinks.map((link) => (
-                                <a key={link.link} href={link.link} className="popup__link" target="_blank" rel="noreferrer">{link.linkTitle}</a>
+                                <a key={link.link + Math.random()} href={link.link} className="popup__link" target="_blank" rel="noreferrer">{link.linkTitle ? link.linkTitle : link.link}</a>
                             ))}
                         </div>
                         <div className="popup__links__column">
                             <h4 className="popup__links__title">Found in files:</h4>
                             {doc.links.matchedLinksInOtherFiles.map((item) => (
-                                <a key={item.foundInDocID} href={`https://docs.google.com/document/d/${item.foundInDocID}`} className="popup__link" target="_blank" rel="noreferrer">{item.foundInDocTitle}</a>
+                                <a key={item.foundInDocID + Math.random()} href={`https://docs.google.com/document/d/${item.foundInDocID}`} className="popup__link" target="_blank" rel="noreferrer">{item.foundInDocTitle}</a>
                             ))}
                         </div>
                     </div>
