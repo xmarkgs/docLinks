@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './search-input.css';
 
 let SearchInput = ({ onInput, value, click }) => (

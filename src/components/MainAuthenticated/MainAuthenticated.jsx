@@ -14,6 +14,12 @@ class MainAuthenticated extends Component {
         docObjects: [],
         ownedDocObjects: [],
         sortedDocObjects: [],
+        sheetObjects: [],
+        ownedSheetObjects: [],
+        sortedSheetObjects: [],
+        slidesObjects: [],
+        ownedSlidesObjects: [],
+        sortedSlidesObjects: [],
         inSearch: false,
         tooManyRequests: false
     }
@@ -27,6 +33,7 @@ class MainAuthenticated extends Component {
     getDocumentInfo = async (event, docID = this.state.inputIDtoSearch, findLinks) => {
         let { accessToken } = this.state.googleAuth;
         let docObj = {
+            type: "docs",
             id: docID,
             title: "Document",
             links: {
@@ -58,13 +65,13 @@ class MainAuthenticated extends Component {
                 return;
             })
             .then(() => {
-                console.log(docObj.links.foundLinks);
+                // console.log(docObj.links.foundLinks);
                 return docObj;
             })
     }
 
     findDocumentLinks = (content, docID) => {
-        console.log(content);
+        // console.log(content);
         let links = {
             foundLinks: [],
             matchedLinksInOtherFiles: []
@@ -73,12 +80,12 @@ class MainAuthenticated extends Component {
             if (content[i].paragraph !== undefined && content[i].paragraph.elements !== undefined) {
                 for (let z = 0; z < content[i].paragraph.elements.length; z++) {
                     if (content[i].paragraph.elements[z].textRun !== undefined && content[i].paragraph.elements[z].textRun.textStyle !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link.url.length > 1) {
-                        if (content[i].paragraph.elements[z].textRun.textStyle.link.url.includes("https://docs.google.com/document/d")) {
+                        if (content[i].paragraph.elements[z].textRun.textStyle.link.url.includes("https://docs.google.com")) {
                             links.foundLinks.push(content[i].paragraph.elements[z].textRun.textStyle.link.url);
                         }
                     } else if (content[i].paragraph.elements[z].textRun !== undefined && content[i].paragraph.elements[z].textRun.content !== undefined) {
                         for (let string of content[i].paragraph.elements[z].textRun.content.split(" ")) {
-                            if (string.includes("https://docs.google.com/document/d/")) {
+                            if (string.includes("https://docs.google.com")) {
                                 links.foundLinks.push(string);
                             }
                         }
@@ -93,15 +100,15 @@ class MainAuthenticated extends Component {
                                     if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements !== undefined) {
                                         for (let c = 0; c < content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements.length; c++) {
                                             if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url.length > 1) {
-                                                if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url.includes("https://docs.google.com/document/d")) {
-                                                    console.log("sd");
+                                                if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url.includes("https://docs.google.com/document")) {
+                                                    // console.log("sd");
                                                     links.foundLinks.push(content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url);
                                                 }
                                             } else if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.content !== undefined) {
                                                 for (let string of content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.content.split(" ")) {
-                                                    if (string.includes("https://docs.google.com/document/d/")) {
+                                                    if (string.includes("https://docs.google.com")) {
                                                         links.foundLinks.push(string);
-                                                        console.log(string);
+                                                        // console.log(string);
                                                     }
                                                 }
                                             }
@@ -114,7 +121,7 @@ class MainAuthenticated extends Component {
                 }
             }
         }
-        console.log(links.foundLinks);
+        // console.log(links.foundLinks);
         return links;
     }
 
@@ -130,7 +137,7 @@ class MainAuthenticated extends Component {
             })
                 .then(res => res.json())
                 .then(res => {
-                    console.log(res);
+                    // console.log(res);
                     let docObjects = [];
                     let findCover = (i) => {
                         this.getDocumentInfo(null, res.files[i].id, true)
@@ -141,18 +148,18 @@ class MainAuthenticated extends Component {
                                     tooManyRequests: false
                                 });
                                 if (docObjects.length === res.files.length) {
-                                    console.log(docObjects);
+                                    // console.log(docObjects);
                                     return docObjects;
                                 }
                             })
                             .then((docObjects) => {
-                                console.log(docObjects);
+                                // console.log(docObjects);
                                 if (docObjects) {
                                     for (let doc of docObjects) {
                                         for (let otherDoc of docObjects) {
                                             for (let link of otherDoc.links.foundLinks) {
-                                                if (link.includes(`https://docs.google.com/document/d/${doc.id}`)) {
-                                                    console.log(otherDoc.title);
+                                                if (link.includes(`${doc.id}`)) {
+                                                    // console.log(otherDoc.title);
                                                     doc.links.matchedLinksInOtherFiles.push({
                                                         foundInDocTitle: otherDoc.title,
                                                         foundInDocID: otherDoc.id
@@ -166,22 +173,34 @@ class MainAuthenticated extends Component {
                             })
                             .then(docObjects => {
                                 if (docObjects) {
-                                    console.log(docObjects);
+                                    // console.log(docObjects);
 
                                     let docsLinksFormatted = [];
                                     for (let docNew of docObjects) {
                                         let linksArray = [];
-                                        console.log(linksArray);
+                                        // console.log(linksArray);
                                         for (let link of docNew.links.foundLinks) {
+                                            console.log(link);
+                                            let type = "";
+
+                                            if (link.includes("https://docs.google.com/presentation")) {
+                                                type = "slides";
+                                            } else if (link.includes("https://docs.google.com/document")) {
+                                                type = "docs";
+                                            } else if (link.includes("https://docs.google.com/spreadsheets")) {
+                                                type = "sheets";
+                                            }                                            
+
                                             let noFoundCounter = 0;
                                             for (let otherDoc of docObjects) {
-                                                console.log(link);
-                                                console.log(otherDoc);
-                                                console.log(linksArray);
+                                                // console.log(link);
+                                                // console.log(otherDoc);
+                                                // console.log(linksArray);
                                                 if (link.includes(otherDoc.id)) {
-                                                    console.log("athc");
-                                                    
+                                                    // console.log("athc");
+
                                                     linksArray.push({
+                                                        type,
                                                         link,
                                                         linkTitle: otherDoc.title
                                                     });
@@ -189,6 +208,7 @@ class MainAuthenticated extends Component {
                                                     noFoundCounter++;
                                                     if (noFoundCounter === docObjects.length) {
                                                         linksArray.push({
+                                                            type,
                                                             link,
                                                         });
                                                     }
@@ -200,7 +220,7 @@ class MainAuthenticated extends Component {
                                         docsLinksFormatted.push(formattedDoc);
                                     }
 
-                                    console.log(docsLinksFormatted);
+                                    // console.log(docsLinksFormatted);
 
                                     let ownedDocs = [];
                                     for (let doc of docsLinksFormatted) {
@@ -228,7 +248,7 @@ class MainAuthenticated extends Component {
                                 }, Math.random() * 1000 * 5);
                             });
                     }
-                    console.log(res)
+                    // console.log(res)
                     for (let i = 0; i < res.files.length; i++) {
                         findCover(i);
 
@@ -316,8 +336,386 @@ class MainAuthenticated extends Component {
                         //         }, 1000);
                         //     });
                     }
-                });
+                })
+                .then(() => {
+                    return fetch(`https://www.googleapis.com/drive/v3/files?q=mimeType = 'application/vnd.google-apps.spreadsheet'`, {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${accessToken}` }
+                    })
+                })
+                .then(res => res.json())
+                .then(res => {
+                    let docObjects = []
+
+                    let findCover = (i) => {
+                        this.getSheetsInfo(res.files[i].id, res.files[i].name)
+                            .then(doc => {
+                                docObjects.push(doc);
+                                this.setState({
+                                    inSearch: true,
+                                    tooManyRequests: false
+                                });
+                                if (docObjects.length === res.files.length) {
+                                    // console.log(docObjects);
+                                    return docObjects;
+                                }
+                            })
+                            .then((docObjects) => {
+                                // console.log(docObjects);
+                                if (docObjects) {
+                                    for (let doc of docObjects) {
+                                        for (let otherDoc of docObjects) {
+                                            for (let link of otherDoc.links.foundLinks) {
+                                                if (link.includes(`${doc.id}`)) {
+                                                    // console.log(otherDoc.title);
+                                                    doc.links.matchedLinksInOtherFiles.push({
+                                                        foundInDocTitle: otherDoc.title,
+                                                        foundInDocID: otherDoc.id
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return docObjects;
+                                }
+                            })
+                            .then(docObjects => {
+                                if (docObjects) {
+                                    // console.log(docObjects);
+
+                                    let docsLinksFormatted = [];
+                                    for (let docNew of docObjects) {
+                                        let linksArray = [];
+                                        // console.log(linksArray);
+                                        for (let link of docNew.links.foundLinks) {
+                                            console.log(link);
+                                            let type = "";
+
+                                            if (link.includes("https://docs.google.com/presentation")) {
+                                                type = "slides";
+                                            } else if (link.includes("https://docs.google.com/document")) {
+                                                type = "docs";
+                                            } else if (link.includes("https://docs.google.com/spreadsheets")) {
+                                                type = "sheets";
+                                            }                                            
+
+                                            let noFoundCounter = 0;
+                                            for (let otherDoc of docObjects) {
+                                                // console.log(link);
+                                                // console.log(otherDoc);
+                                                // console.log(linksArray);
+                                                if (link.includes(otherDoc.id)) {
+                                                    // console.log("athc");
+
+                                                    linksArray.push({
+                                                        type,
+                                                        link,
+                                                        linkTitle: otherDoc.title
+                                                    });
+                                                } else {
+                                                    noFoundCounter++;
+                                                    if (noFoundCounter === docObjects.length) {
+                                                        linksArray.push({
+                                                            type,
+                                                            link,
+                                                        });
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        let formattedDoc = docNew;
+                                        formattedDoc.links.foundLinks = linksArray;
+                                        docsLinksFormatted.push(formattedDoc);
+                                    }
+
+                                    // console.log(docsLinksFormatted);
+
+                                    let ownedDocs = [];
+                                    for (let doc of docsLinksFormatted) {
+                                        if (doc.owner.includes(email)) {
+                                            ownedDocs.push(doc);
+                                        }
+                                    }
+
+                                    this.setState({
+                                        sheetObjects: docsLinksFormatted,
+                                        ownedSheetObjects: ownedDocs,
+                                        sortedSheetObjects: docsLinksFormatted,
+                                        inSearch: false,
+                                        tooManyRequests: false
+                                    });
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                this.setState({
+                                    tooManyRequests: true
+                                });
+                                setTimeout(() => {
+                                    findCover(i);
+                                }, Math.random() * 1000 * 5);
+                            });
+                    }
+
+                    for (let i = 0; i < res.files.length; i++) {
+                        findCover(i);
+                    }
+                })
+                .then(() => {
+                    return fetch(`https://www.googleapis.com/drive/v3/files?q=mimeType = 'application/vnd.google-apps.presentation'`, {
+                        method: 'GET',
+                        headers: { 'Authorization': `Bearer ${accessToken}` }
+                    })
+                })
+                .then(res => res.json())
+                .then(res => {
+                    let docObjects = []
+
+                    let findCover = (i) => {
+                        this.getSlidesInfo(res.files[i].id, res.files[i].name)
+                            .then(doc => {
+                                docObjects.push(doc);
+                                this.setState({
+                                    inSearch: true,
+                                    tooManyRequests: false
+                                });
+                                if (docObjects.length === res.files.length) {
+                                    // console.log(docObjects);
+                                    return docObjects;
+                                }
+                            })
+                            .then((docObjects) => {
+                                // console.log(docObjects);
+                                if (docObjects) {
+                                    for (let doc of docObjects) {
+                                        for (let otherDoc of docObjects) {
+                                            for (let link of otherDoc.links.foundLinks) {
+                                                if (link.includes(`${doc.id}`)) {
+                                                    // console.log(otherDoc.title);
+                                                    doc.links.matchedLinksInOtherFiles.push({
+                                                        foundInDocTitle: otherDoc.title,
+                                                        foundInDocID: otherDoc.id
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    }
+                                    return docObjects;
+                                }
+                            })
+                            .then(docObjects => {
+                                if (docObjects) {
+                                    // console.log(docObjects);
+
+                                    let docsLinksFormatted = [];
+                                    for (let docNew of docObjects) {
+                                        let linksArray = [];
+                                        // console.log(linksArray);
+                                        for (let link of docNew.links.foundLinks) {
+                                            console.log(link);
+                                            let type = "";
+
+                                            if (link.includes("https://docs.google.com/presentation")) {
+                                                type = "slides";
+                                            } else if (link.includes("https://docs.google.com/document")) {
+                                                type = "docs";
+                                            } else if (link.includes("https://docs.google.com/spreadsheets")) {
+                                                type = "sheets";
+                                            }                                            
+
+                                            let noFoundCounter = 0;
+                                            for (let otherDoc of docObjects) {
+                                                // console.log(link);
+                                                // console.log(otherDoc);
+                                                // console.log(linksArray);
+                                                if (link.includes(otherDoc.id)) {
+                                                    // console.log("athc");
+
+                                                    linksArray.push({
+                                                        type,
+                                                        link,
+                                                        linkTitle: otherDoc.title
+                                                    });
+                                                } else {
+                                                    noFoundCounter++;
+                                                    if (noFoundCounter === docObjects.length) {
+                                                        linksArray.push({
+                                                            type,
+                                                            link,
+                                                        });
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        let formattedDoc = docNew;
+                                        formattedDoc.links.foundLinks = linksArray;
+                                        docsLinksFormatted.push(formattedDoc);
+                                    }
+
+                                    // console.log(docsLinksFormatted);
+
+                                    let ownedDocs = [];
+                                    for (let doc of docsLinksFormatted) {
+                                        if (doc.owner.includes(email)) {
+                                            ownedDocs.push(doc);
+                                        }
+                                    }
+
+                                    this.setState({
+                                        slidesObjects: docsLinksFormatted,
+                                        ownedSlidesObjects: ownedDocs,
+                                        sortedSlidesObjects: docsLinksFormatted,
+                                        inSearch: false,
+                                        tooManyRequests: false
+                                    });
+                                }
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                this.setState({
+                                    tooManyRequests: true
+                                });
+                                setTimeout(() => {
+                                    findCover(i);
+                                }, Math.random() * 1000 * 5);
+                            });
+                    }
+
+                    for (let i = 0; i < res.files.length; i++) {
+                        findCover(i);
+                    }
+                })
         })
+    }
+
+    getSlidesInfo = async (id, name) => {
+        let { accessToken } = this.state.googleAuth;
+
+        let slideObj = {
+            type: "slides",
+            id: id,
+            title: name,
+            links: {
+            },
+            modifiedTime: undefined,
+            owner: ""
+        }
+
+        return fetch(`https://slides.googleapis.com/v1/presentations/1H7DMy0PYzuXGJO6kXTVx_DfJakUFQ2hz0t8sMvnijHM?fields=slides.pageElements.shape.text.textElements.textRun.content,slides.pageElements.table.tableRows.tableCells.text.textElements.textRun.content`, {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${accessToken}` }
+        })
+            .then(res => res.json())
+            .then(res => {
+                slideObj.links = this.findSlidesLinks(res);
+                return;
+            })
+            .then(() => {
+                return fetch(`https://www.googleapis.com/drive/v3/files/${id}?fields=modifiedTime,owners`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+            })
+            .then(res => res.json())
+            .then(res => {
+                slideObj.modifiedTime = res.modifiedTime;
+                slideObj.owner = res.owners[0].emailAddress;
+                return;
+            })
+            .then(() => {
+                console.log(slideObj);
+                return slideObj;
+            });
+    }
+
+    findSlidesLinks = ({ slides }) => {
+        let links = {
+            foundLinks: [],
+            matchedLinksInOtherFiles: []
+        }
+
+        for (let slide of slides) {
+            for (let pageElement of slide.pageElements) {
+                if (pageElement.table !== undefined) {
+
+                } else if (pageElement.shape !== undefined) {
+                    for (let textElement of pageElement.shape.text.textElements) {
+                        if (textElement.textRun !== undefined && textElement.textRun.content !== undefined) {
+                            if (textElement.textRun.content.includes("https://docs.google.com")) {
+                                links.foundLinks.push(textElement.textRun.content);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return links;
+    }
+
+    getSheetsInfo = async (id, name) => {
+        let { accessToken } = this.state.googleAuth;
+
+        let sheetObj = {
+            type: "sheets",
+            id: id,
+            title: name,
+            links: {
+            },
+            modifiedTime: undefined,
+            owner: ""
+        }
+
+        return fetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}?includeGridData=true`, {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${accessToken}` }
+        })
+            .then(res => res.json())
+            .then(res => {
+                sheetObj.links = this.findSheetsLinks(res);
+                return;
+            })
+            .then(() => {
+                return fetch(`https://www.googleapis.com/drive/v3/files/${id}?fields=modifiedTime,owners`, {
+                    method: 'GET',
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                });
+            })
+            .then(res => res.json())
+            .then(res => {
+                sheetObj.modifiedTime = res.modifiedTime;
+                sheetObj.owner = res.owners[0].emailAddress;
+                return;
+            })
+            .then(() => {
+                return sheetObj;
+            });
+    }
+
+    findSheetsLinks = ({ sheets }) => {
+        let links = {
+            foundLinks: [],
+            matchedLinksInOtherFiles: []
+        }
+
+        for (let sheet of sheets) {
+            for (let content of sheet.data) {
+                for (let row of content.rowData) {
+                    if (row.values !== undefined) {
+                        for (let value of row.values) {
+                            if (value.hyperlink !== undefined) {
+                                if (value.hyperlink.includes("https://docs.google.com")) {
+                                    links.foundLinks.push(value.hyperlink);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // console.log(links);
+        return links;
     }
 
     handleSearchInputChange = ({ target: { value } }) => {
@@ -366,7 +764,7 @@ class MainAuthenticated extends Component {
                             }
                         }
                     }
-                    console.log(sortedDocs)
+                    // console.log(sortedDocs)
                     this.setState(({ searchInputValue: prev }) => ({
                         searchInputValue: '',
                         sortedDocObjects: sortedDocs,
