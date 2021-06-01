@@ -21,7 +21,7 @@ const Login = ({ isLogged, loginAction, logoutAction, avatarLink }) => {
         return (
             <GoogleLogin
                 clientId="982786168956-334v8t9r023r1g6juk228qlr7ecro1l0.apps.googleusercontent.com"
-                scope="email profile https://www.googleapis.com/auth/userinfo.profile openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/documents.readonly https://www.googleapis.com/auth/drive.readonly"
+                scope="email profile https://www.googleapis.com/auth/userinfo.profile openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive.readonly"
                 render={renderProps => (
                     <button className="login-btn" onClick={renderProps.onClick} disabled={renderProps.disabled}>
                         <p className="login-btn__title">Login with Google</p>
