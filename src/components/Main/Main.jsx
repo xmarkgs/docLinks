@@ -39,8 +39,8 @@ class Main extends Component {
         return (
             <>
                 { isLogged ? 
-                <MainAuthenticated googleAuth={googleAuth}>
-                <Login isLogged={isLogged} loginAction={this.responseGoogle} logoutAction={this.logoutAction} avatarLink={avatarLink} />
+                <MainAuthenticated googleAuth={googleAuth} avatarLink={avatarLink}>
+                <Login isLogged={isLogged} loginAction={this.responseGoogle} logoutAction={this.logoutAction} />
                 </MainAuthenticated> 
                 : <MainUnauthenticated>
                 <Login isLogged={isLogged} loginAction={this.responseGoogle} logoutAction={this.logoutAction} />

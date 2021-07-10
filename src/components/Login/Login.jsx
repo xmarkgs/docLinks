@@ -8,10 +8,7 @@ const Login = ({ isLogged, loginAction, logoutAction, avatarLink }) => {
                 clientId="982786168956-334v8t9r023r1g6juk228qlr7ecro1l0.apps.googleusercontent.com"
                 buttonText="Logout"
                 render={renderProps => (
-                    <button className="logout-btn" onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                        <img src={avatarLink} alt="" className="user-avatar"/>
-                        <img src="/logout.svg" alt=""/>
-                    </button>
+                    <button className="logout-btn" onClick={renderProps.onClick} disabled={renderProps.disabled}>Logout</button>
                 )}
                 onLogoutSuccess={logoutAction}
                 onFailure={logoutAction}
