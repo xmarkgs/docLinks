@@ -5,7 +5,7 @@ let SearchInput = ({ onInput, value, click }) => (
     <div className="search-section">
         <input className="search-input" type="text" value={value} onInput={onInput} onKeyPress={click} placeholder="Search for files..." />
         <button className="search-btn" onClick={click}>
-            <img src="/search.svg" />
+            <img alt="" src="/search.svg" />
         </button>
     </div>
 );

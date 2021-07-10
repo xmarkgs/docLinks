@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './authenticated.css';
 import SearchInput from '../SearchInput/SearchInput';
-import SearchParameters from '../SearchParameters/SearchParameters';
+// import SearchParameters from '../SearchParameters/SearchParameters';
 import UserAccess from '../UserAccess/UserAccess';
 import DocsSection from '../DocsSection/DocsSection';
 import { Table } from 'antd';
-import TableIcon from '../TableIcon/TableIcon';
+// import TableIcon from '../TableIcon/TableIcon';
 import DocCard from '../DocCard/DocCard';
 
 class MainAuthenticated extends Component {
@@ -590,18 +590,10 @@ class MainAuthenticated extends Component {
     }
 
     getUserDocsList = () => {
-        let { accessToken, profileObj: { email } } = this.state.googleAuth;
         this.setState({
             sortedDocObjects: [],
             inSearch: true
         }, () => {
-            // if (this.googleApiDocs() === "loaded") {
-            //     if (this.googleApiSlides() === "loaded") {
-            //         if (this.googleApiSheets() === "loaded") {
-            //             console.log("I can't believe my eyes");
-            //         }
-            //     }
-            // }
             this.googleApiDocs();
         });
     }
@@ -736,7 +728,7 @@ class MainAuthenticated extends Component {
                 return sheetObj;
             })
             .catch(err => {
-                if (id == '15VXhAPioDOsNRae7c0QpdjVX7a1P4t4rD9IQ9x0NBAo') {
+                if (id === '15VXhAPioDOsNRae7c0QpdjVX7a1P4t4rD9IQ9x0NBAo') {
                     return sheetObj;
                 }
             });
@@ -883,7 +875,7 @@ class MainAuthenticated extends Component {
     }
 
     render() {
-        let { searchInputValue, searchParametersValue, sortedDocObjects, sortedSlidesObjects, sortedSheetObjects, prevSearchInputValue, docObjects, tooManyRequests, ownedDocObjects } = this.state;
+        let { searchInputValue, sortedDocObjects, sortedSlidesObjects, sortedSheetObjects } = this.state;
 
         const columns = [
             {

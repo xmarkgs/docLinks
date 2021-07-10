@@ -4,16 +4,16 @@ const TableIcon = ({ icon, title }) => {
     console.log(icon);
     switch (icon) {
         case "document":
-            return <><img src="/Docs.svg" /><p>{title}</p></>;
+            return <><img alt="" src="/Docs.svg" /><p>{title}</p></>;
             break;
         case "presentation":
-            return <img src="/Slides.svg" />;
+            return <img alt="" src="/Slides.svg" />;
             break;
         case "spreadsheet":
-            return <img src="/Sheets.svg" />;
+            return <img alt="" src="/Sheets.svg" />;
             break;
         default:
-            return <img src="" />;
+            return <img alt="" src="" />;
             break;
     }
 }

@@ -10,14 +10,14 @@ const UserAccess = (props) => (
         placement="bottomRight"
         arrowPointAtCenter={true}
         >
-            <img src="/question-mark-circle.svg" />
+            <img alt="" src="/question-mark-circle.svg" />
         </Tooltip>
         <Tooltip 
         title={props.children}
         placement="bottomRight"
         arrowPointAtCenter={true}
         >
-            <img src={props.avatarLink} className="user-avatar" />
+            <img alt="" src={props.avatarLink} className="user-avatar" />
         </Tooltip>
     </div>
 );
