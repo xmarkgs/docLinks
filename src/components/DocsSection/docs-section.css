@@ -1,0 +1,18 @@
+.docs-section {
+    max-width: 1096px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 24px 0;
+}
+
+.docs-section__title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.docs-section__title {
+    font-weight: 600;
+    font-size: 28px;
+    color: #0E0F11;
+}
