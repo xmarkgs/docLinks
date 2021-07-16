@@ -16,8 +16,8 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "node --optimize-for-size --max_old_space_size=8192 start start",
+    "build": "node --optimize-for-size --max_old_space_size=8192 start build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
