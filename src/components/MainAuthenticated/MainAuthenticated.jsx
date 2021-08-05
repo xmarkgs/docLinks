@@ -39,11 +39,11 @@ class MainAuthenticated extends Component {
 
     getDocumentInfo = async (event, docID = this.state.inputIDtoSearch, findLinks, error) => {
 
-        if (!error) {
-            console.log("doc to search");
-        } else {
-            console.log("doc to search after error");
-        }
+        // if (!error) {
+        //     console.log("doc to search");
+        // } else {
+        //     console.log("doc to search after error");
+        // }
 
         let { accessToken } = this.state.googleAuth;
         let docObj = {
@@ -63,6 +63,7 @@ class MainAuthenticated extends Component {
             .then(res => {
                 // console.log(res);
                 docObj.title = res.title;
+                docObj.res = res;
                 if (findLinks) {
                     docObj.links = this.findDocumentLinks(res.body.content);
                 }
@@ -82,6 +83,7 @@ class MainAuthenticated extends Component {
                 // console.log(docObj.links.foundLinks);
                 return docObj;
             })
+            .catch(err => console.log(err, docObj.res));
     }
 
     findDocumentLinks = (content, docID) => {
@@ -93,7 +95,7 @@ class MainAuthenticated extends Component {
         for (let i = 0; i < content.length; i++) {
             if (content[i].paragraph !== undefined && content[i].paragraph.elements !== undefined) {
                 for (let z = 0; z < content[i].paragraph.elements.length; z++) {
-                    if (content[i].paragraph.elements[z].textRun !== undefined && content[i].paragraph.elements[z].textRun.textStyle !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link.url.length > 1) {
+                    if (content[i].paragraph.elements[z].textRun !== undefined && content[i].paragraph.elements[z].textRun.textStyle !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link.url !== undefined && content[i].paragraph.elements[z].textRun.textStyle.link.url.length > 1) {
                         if (content[i].paragraph.elements[z].textRun.textStyle.link.url.includes("https://docs.google.com/document") || content[i].paragraph.elements[z].textRun.textStyle.link.url.includes("https://docs.google.com/spreadsheets") || content[i].paragraph.elements[z].textRun.textStyle.link.url.includes("https://docs.google.com/presentation")) {
                             links.foundLinks.push(content[i].paragraph.elements[z].textRun.textStyle.link.url);
                         }
@@ -113,7 +115,7 @@ class MainAuthenticated extends Component {
                                 for (let b = 0; b < content[i].table.tableRows[z].tableCells[y].content.length; b++) {
                                     if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements !== undefined) {
                                         for (let c = 0; c < content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements.length; c++) {
-                                            if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url.length > 1) {
+                                            if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url !== undefined && content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url.length > 1) {
                                                 if (content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url.includes("https://docs.google.com/document/document") || content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url.includes("https://docs.google.com/spreadsheets") || content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url.includes("https://docs.google.com/presentation")) {
                                                     // console.log("sd");
                                                     links.foundLinks.push(content[i].table.tableRows[z].tableCells[y].content[b].paragraph.elements[c].textRun.textStyle.link.url);
@@ -271,7 +273,7 @@ class MainAuthenticated extends Component {
                 let callForDocs = setInterval(() => {
                     if (docCounter < res.files.length - 1) {
                         docCounter++;
-                        console.log(docCounter);
+                        // console.log(docCounter);
                         findSlidesCover(docCounter, false);
                     } else if (docCounter === res.files.length - 1) {
                         clearInterval(callForDocs);
@@ -419,7 +421,7 @@ class MainAuthenticated extends Component {
                 let callForDocs = setInterval(() => {
                     if (docCounter < res.files.length - 1) {
                         docCounter++;
-                        console.log(docCounter);
+                        // console.log(docCounter);
                         findSheetCover(docCounter, false);
                     } else if (docCounter === res.files.length - 1) {
                         clearInterval(callForDocs);
@@ -572,7 +574,7 @@ class MainAuthenticated extends Component {
                 let callForDocs = setInterval(() => {
                     if (docCounter < res.files.length - 1) {
                         docCounter++;
-                        console.log(docCounter);
+                        // console.log(docCounter);
                         findCover(docCounter, false);
                     } else if (docCounter === res.files.length - 1) {
                         clearInterval(callForDocs);
@@ -600,11 +602,11 @@ class MainAuthenticated extends Component {
 
     getSlidesInfo = async (id, name, error) => {
 
-        if (!error) {
-            console.log("slides to search");
-        } else {
-            console.log("slides to search after error");
-        }
+        // if (!error) {
+        //     console.log("slides to search");
+        // } else {
+        //     console.log("slides to search after error");
+        // }
 
         let { accessToken } = this.state.googleAuth;
 
@@ -640,7 +642,7 @@ class MainAuthenticated extends Component {
                 return;
             })
             .then(() => {
-                console.log(slideObj);
+                // console.log(slideObj);
                 return slideObj;
             })
             .catch(err => console.log(err));
@@ -681,11 +683,11 @@ class MainAuthenticated extends Component {
 
     getSheetsInfo = async (id, name, error) => {
 
-        if (!error) {
-            console.log("sheets to search");
-        } else {
-            console.log("sheets to search after error", id);
-        }
+        // if (!error) {
+        //     console.log("sheets to search");
+        // } else {
+        //     console.log("sheets to search after error", id);
+        // }
 
 
         let { accessToken } = this.state.googleAuth;
@@ -724,10 +726,11 @@ class MainAuthenticated extends Component {
                 return;
             })
             .then(() => {
-                console.log(sheetObj);
+                // console.log(sheetObj);
                 return sheetObj;
             })
             .catch(err => {
+                console.log(err);
                 if (id === '15VXhAPioDOsNRae7c0QpdjVX7a1P4t4rD9IQ9x0NBAo') {
                     return sheetObj;
                 }
@@ -821,7 +824,6 @@ class MainAuthenticated extends Component {
                             }
                         }
                     } else {
-                        console.log("lol");
                         for (let doc of this.state.docObjects) {
                             if (doc.id.toLowerCase().includes(this.state.searchInputValue.toLowerCase()) || doc.title.toLowerCase().includes(this.state.searchInputValue.toLowerCase())) {
                                 sortedDocs.push(doc);
@@ -914,7 +916,7 @@ class MainAuthenticated extends Component {
         ];
 
         const data = [];
-        console.log(sortedDocObjects);
+        // console.log(sortedDocObjects);
         if (sortedDocObjects.length > 0) {
             for (let document of sortedDocObjects) {
                 let object = {
@@ -949,8 +951,8 @@ class MainAuthenticated extends Component {
             }
         }
 
-        function onChange(pagination, filters, sorter, extra) {
-            console.log('params', pagination, filters, sorter, extra);
+        function onChangeTable(pagination, filters, sorter, extra) {
+            // console.log('params', pagination, filters, sorter, extra);
         }
 
         return (
@@ -981,7 +983,7 @@ class MainAuthenticated extends Component {
                         </div>
                     </header>
                     <DocsSection totalFiles={sortedDocObjects.length + sortedSlidesObjects.length + sortedSheetObjects.length}>
-                        <Table columns={columns} dataSource={data} onChange={onChange} />
+                        <Table columns={columns} dataSource={data} onChange={onChangeTable} />
                     </DocsSection>
                 </div>
             </>
